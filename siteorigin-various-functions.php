@@ -16,10 +16,14 @@ These may make reference to specific SiteOrigin functions so they won't work on 
 function dk_get_entry_thumbnail( $atts ) {
   // attribute defaults to title so that is returned it no atts are given
   global $post;
+  $img= '';
   $a = shortcode_atts( array(
 		'imagesize' => 'medium',
 	 ), $atts );
-  $alt = esc_html( get_the_title() );
-  return wp_get_attachment_image( get_the_ID(), $a['imagesize'], false, array( 'alt' => $alt )  );
+  if ( has_post_thumbnail() ) { // check if the post has a featured image
+    $alt = esc_html( get_the_title() );
+    $img = wp_get_attachment_image( get_post_thumbnail_id(), $a['imagesize'], false, array( 'alt' => $alt ) );
+  }
+  return $img;
 }
 add_shortcode( 'getfeatureimage', 'dk_get_entry_thumbnail' );
